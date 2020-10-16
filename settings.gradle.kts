@@ -1,3 +1,7 @@
+rootProject.name = "kolog-build"
+
+include("kolog")
+
 pluginManagement {
     val kotlinVersion: String by settings
     val dokkaPluginVersion: String by settings
@@ -8,7 +12,3 @@ pluginManagement {
         id("net.researchgate.release") version releasePluginVersion
     }
 }
-
-rootProject.name = "kolog-build"
-
-include("kolog")
