@@ -1,22 +1,25 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") apply false
     id("org.jetbrains.dokka") apply false
     id("net.researchgate.release")
-    id("java-library")
-    id("maven-publish")
+    `java-library`
+    `maven-publish`
 }
 
 subprojects {
-    apply {
-        plugin("org.jetbrains.kotlin.jvm")
-        plugin("org.jetbrains.dokka")
-        plugin("maven-publish")
-    }
+    apply(plugin = "org.jetbrains.kotlin.jvm")
+    apply(plugin = "org.jetbrains.dokka")
+    apply(plugin = "maven-publish")
 
-    java.sourceCompatibility = JavaVersion.VERSION_1_8
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(8))
+        }
+    }
 
     repositories {
         jcenter()
@@ -27,6 +30,7 @@ subprojects {
     val junitVersion: String by project
     val kotlinxCoroutinesVersion: String by project
     val logbackVersion: String by project
+
     dependencies {
         api("org.slf4j:slf4j-api:$slf4jVersion")
 
@@ -38,15 +42,13 @@ subprojects {
         testRuntimeOnly("ch.qos.logback:logback-classic:$logbackVersion")
     }
 
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            freeCompilerArgs = listOf("-Xjvm-default=enable", "-Xexplicit-api=strict", "-Xinline-classes", "-Xuse-experimental=kotlin.contracts.ExperimentalContracts")
-            jvmTarget = "1.8"
-        }
+    val compileKotlin: KotlinCompile by tasks
+    compileKotlin.kotlinOptions {
+        freeCompilerArgs = listOf("-Xjvm-default=enable", "-Xexplicit-api=strict", "-Xinline-classes", "-Xuse-experimental=kotlin.contracts.ExperimentalContracts")
+        jvmTarget = "1.8"
     }
 
     val compileTestKotlin: KotlinCompile by tasks
-
     compileTestKotlin.kotlinOptions {
         freeCompilerArgs = listOf("-Xjvm-default=enable")
         jvmTarget = "1.8"
@@ -55,7 +57,7 @@ subprojects {
     tasks.getByName<Test>("test") {
         useJUnitPlatform()
         testLogging {
-            //events 'passed', 'failed', 'skipped'
+            events = setOf(TestLogEvent.STARTED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
             showStandardStreams = true
         }
     }
@@ -67,15 +69,7 @@ subprojects {
         withSourcesJar()
     }
 
-    val dokkaJar by tasks.creating(Jar::class) {
-        dependsOn("dokkaHtml")
-        archiveClassifier.set("javadoc")
-        from(buildDir.resolve("dokka/html"))
-    }
-
     tasks.withType<DokkaTask>().configureEach {
-        //outputDirectory.set(file("$buildDir/javadoc"))
-
         dokkaSourceSets {
             named("main") {
                 configureEach {
@@ -85,12 +79,18 @@ subprojects {
         }
     }
 
+    val dokkaJar = tasks.create<Jar>("dokkaJar") {
+        dependsOn("dokkaHtml")
+        archiveClassifier.set("javadoc")
+        from(buildDir.resolve("dokka/html"))
+    }
+
     publishing {
         repositories {
             maven {
                 val user = "ufoss"
                 val repo = "ufoss"
-                val name = "kotlin-slf4j"
+                val name = "kolog"
                 url = uri("https://api.bintray.com/maven/$user/$repo/$name/;publish=0")
 
                 credentials {
@@ -102,7 +102,7 @@ subprojects {
 
         publications {
             create<MavenPublication>("maven") {
-                artifactId = "project.name"
+                artifactId = project.name
                 from(components["java"])
                 artifact(dokkaJar)
                 pom {
@@ -131,6 +131,6 @@ tasks.replace("build").dependsOn(subprojects.map { it.tasks.findByName("build") 
 // when version changes :
 // -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
 tasks.wrapper {
-    gradleVersion = "6.6.1"
+    gradleVersion = "6.7"
     distributionType = Wrapper.DistributionType.ALL
 }
