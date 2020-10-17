@@ -22,10 +22,10 @@ public inline fun <T> Logger.traceTimeMillis(measuredName: String, block: TimeSc
     }
 
     val start = System.currentTimeMillis()
-    val timeScope: TimeScope = if (slf4jLogger.isTraceEnabled) {
+    val timeScope: TimeScope = if (platformLogger.isTraceEnabled) {
         var index = 1
         TimeScope {
-            slf4jLogger.trace("$measuredName step ${index++} : ${System.currentTimeMillis() - start} ms since start")
+            platformLogger.trace("$measuredName step ${index++} : ${System.currentTimeMillis() - start} ms since start")
         }
     } else {
         NoopTimeScope
@@ -47,10 +47,10 @@ public inline fun <T> Logger.debugTimeMillis(measuredName: String, block: TimeSc
     }
 
     val start = System.currentTimeMillis()
-    val timeScope: TimeScope = if (slf4jLogger.isDebugEnabled) {
+    val timeScope: TimeScope = if (platformLogger.isDebugEnabled) {
         var index = 1
         TimeScope {
-            slf4jLogger.debug("$measuredName step ${index++} : ${System.currentTimeMillis() - start} ms since start")
+            platformLogger.debug("$measuredName step ${index++} : ${System.currentTimeMillis() - start} ms since start")
         }
     } else {
         NoopTimeScope
