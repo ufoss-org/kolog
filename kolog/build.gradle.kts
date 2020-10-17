@@ -1,6 +1,6 @@
-import org.jetbrains.kotlin.config.KotlinCompilerVersion
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
     kotlin("multiplatform")
@@ -13,15 +13,12 @@ println("Using Gradle version: ${gradle.gradleVersion}")
 println("Using Kotlin compiler version: ${KotlinCompilerVersion.VERSION}")
 
 kotlin {
+    explicitApi()
+
     jvm {
         val main by compilations.getting {
             kotlinOptions {
-                freeCompilerArgs = listOf(
-                        "-Xjvm-default=all",
-                        "-Xexplicit-api=strict",
-                        "-Xinline-classes",
-                        "-Xuse-experimental=kotlin.contracts.ExperimentalContracts"
-                )
+                freeCompilerArgs = listOf("-Xjvm-default=all")
                 jvmTarget = "1.8"
             }
         }
@@ -42,25 +39,6 @@ kotlin {
 
         mavenPublication {
             artifact(dokkaJar)
-        }
-    }
-
-    configure(targets) {
-        mavenPublication {
-            pom {
-                description.set("kolog duty is to be the idiomatic way to log in Kotlin")
-                url.set("https://github.com/ufoss-org/kolog")
-                licenses {
-                    license {
-                        name.set("The Unlicence")
-                        url.set("https://unlicense.org")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git://github.com/ufoss-org/kolog.git")
-                    url.set("https://github.com/ufoss-org/kolog.git")
-                }
-            }
         }
     }
 
@@ -107,6 +85,35 @@ kotlin {
                 implementation("org.robolectric:robolectric:4.3.1")
             }
         }*/
+    }
+
+    configure(targets) {
+        mavenPublication {
+            pom {
+                description.set("kolog duty is to be the idiomatic way to log in Kotlin")
+                url.set("https://github.com/ufoss-org/kolog")
+                licenses {
+                    license {
+                        name.set("The Unlicence")
+                        url.set("https://unlicense.org")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:git://github.com/ufoss-org/kolog.git")
+                    url.set("https://github.com/ufoss-org/kolog.git")
+                }
+            }
+        }
+    }
+
+    sourceSets.all {
+        languageSettings.apply {
+            languageVersion = "1.4"
+            apiVersion = "1.4"
+            enableLanguageFeature("InlineClasses")
+            useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
+            progressiveMode = true
+        }
     }
 }
 

@@ -2,6 +2,7 @@ import net.researchgate.release.GitAdapter
 
 plugins {
     kotlin("multiplatform") apply false
+    kotlin("jvm") apply false
     id("org.jetbrains.dokka") apply false
     //id("com.android.library") apply false
     id("net.researchgate.release")
@@ -9,9 +10,7 @@ plugins {
 }
 
 subprojects {
-    apply {
-        plugin("maven-publish")
-    }
+    apply(plugin = "maven-publish")
 
     publishing {
         repositories {
@@ -23,13 +22,13 @@ subprojects {
 
                 credentials {
                     username =
-                        if (project.hasProperty("bintray_user")) project.property("bintray_user") as String? else System.getenv(
-                            "BINTRAY_USER"
-                        )
+                            if (project.hasProperty("bintray_user")) project.property("bintray_user") as String? else System.getenv(
+                                    "BINTRAY_USER"
+                            )
                     password =
-                        if (project.hasProperty("bintray_api_key")) project.property("bintray_api_key") as String? else System.getenv(
-                            "BINTRAY_API_KEY"
-                        )
+                            if (project.hasProperty("bintray_api_key")) project.property("bintray_api_key") as String? else System.getenv(
+                                    "BINTRAY_API_KEY"
+                            )
                 }
             }
         }
