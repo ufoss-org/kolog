@@ -113,6 +113,8 @@ kotlin {
             apiVersion = "1.4"
             enableLanguageFeature("InlineClasses")
             useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
+            useExperimentalAnnotation("kotlin.time.ExperimentalTime")
+            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
             progressiveMode = true
         }
     }

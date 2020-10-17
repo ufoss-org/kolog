@@ -9,6 +9,9 @@ package org.ufoss.kolog
 
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
+import kotlin.jvm.JvmMultifileClass
+import kotlin.jvm.JvmName
+import kotlin.time.TimeSource
 
 /**
  * Executes the given [block] and logs at the TRACE level the elapsed time in milliseconds.
@@ -21,17 +24,17 @@ public inline fun <T> Logger.traceTimeMillis(measuredName: String, block: TimeSc
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    val start = System.currentTimeMillis()
-    val timeScope: TimeScope = if (platformLogger.isTraceEnabled) {
+    val start = TimeSource.Monotonic.markNow()
+    val timeScope: TimeScope = if (isTraceEnabled) {
         var index = 1
         TimeScope {
-            platformLogger.trace("$measuredName step ${index++} : ${System.currentTimeMillis() - start} ms since start")
+            trace { "$measuredName step ${index++} : ${start.elapsedNow().inMilliseconds} ms since start" }
         }
     } else {
         NoopTimeScope
     }
     return block(timeScope).apply {
-        trace { "$measuredName is finished : ${System.currentTimeMillis() - start} ms since start" }
+        trace { "$measuredName is finished : ${start.elapsedNow().inMilliseconds} ms since start" }
     }
 }
 
@@ -46,16 +49,16 @@ public inline fun <T> Logger.debugTimeMillis(measuredName: String, block: TimeSc
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
 
-    val start = System.currentTimeMillis()
-    val timeScope: TimeScope = if (platformLogger.isDebugEnabled) {
+    val start = TimeSource.Monotonic.markNow()
+    val timeScope: TimeScope = if (isDebugEnabled) {
         var index = 1
         TimeScope {
-            platformLogger.debug("$measuredName step ${index++} : ${System.currentTimeMillis() - start} ms since start")
+            debug { "$measuredName step ${index++} : ${start.elapsedNow().inMilliseconds} ms since start" }
         }
     } else {
         NoopTimeScope
     }
     return block(timeScope).apply {
-        debug { "$measuredName is finished : ${System.currentTimeMillis() - start} ms since start" }
+        debug { "$measuredName is finished : ${start.elapsedNow().inMilliseconds} ms since start" }
     }
 }

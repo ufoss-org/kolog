@@ -50,7 +50,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @return True if this Logger is enabled for the TRACE level, false otherwise.
      */
-    public val isTraceEnabled: Boolean get() = platformLogger.isTraceEnabled
+    public override val isTraceEnabled: Boolean get() = platformLogger.isTraceEnabled
 
     /**
      * Similar to isTraceEnabled property except that the marker data is also taken into account.
@@ -65,7 +65,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @return True if this Logger is enabled for the DEBUG level, false otherwise.
      */
-    public val isDebugEnabled: Boolean get() = platformLogger.isDebugEnabled
+    public override val isDebugEnabled: Boolean get() = platformLogger.isDebugEnabled
 
     /**
      * Similar to isDebugEnabled property except that the marker data is also taken into account.
@@ -80,7 +80,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @return True if this Logger is enabled for the INFO level, false otherwise.
      */
-    public val isInfoEnabled: Boolean get() = platformLogger.isInfoEnabled
+    public override val isInfoEnabled: Boolean get() = platformLogger.isInfoEnabled
 
     /**
      * Similar to isInfoEnabled property except that the marker data is also taken into account.
@@ -95,7 +95,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @return True if this Logger is enabled for the WARN level, false otherwise.
      */
-    public val isWarnEnabled: Boolean get() = platformLogger.isWarnEnabled
+    public override val isWarnEnabled: Boolean get() = platformLogger.isWarnEnabled
 
     /**
      * Similar to isWarnEnabled property except that the marker data is also taken into account.
@@ -110,7 +110,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @return True if this Logger is enabled for the ERROR level, false otherwise.
      */
-    public val isErrorEnabled: Boolean get() = platformLogger.isErrorEnabled
+    public override val isErrorEnabled: Boolean get() = platformLogger.isErrorEnabled
 
     /**
      * Similar to isErrorEnabled property except that the marker data is also taken into account.
