@@ -2,16 +2,19 @@
  * This is free and unencumbered software released into the public domain, following <https://unlicense.org>
  */
 
+// fixme verify this naming is working as expected
 @file:JvmMultifileClass
 @file:JvmName("LoggerKt")
-@file:Suppress("unused", "FunctionName", "NOTHING_TO_INLINE")
+@file:Suppress("FunctionName")
 
 package org.ufoss.kolog
 
-import org.slf4j.LoggerFactory
-import java.lang.invoke.MethodHandles
+import kotlin.js.JsName
+import kotlin.jvm.JvmMultifileClass
+import kotlin.jvm.JvmName
 
 /**
  * Return a logger named corresponding to the class this function is called in
  */
-public actual inline fun Logger(): Logger = Logger(LoggerFactory.getLogger(MethodHandles.lookup().lookupClass()))
+@JsName("logger")
+public expect inline fun Logger(): Logger

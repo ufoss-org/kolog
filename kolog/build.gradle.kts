@@ -54,6 +54,7 @@ kotlin {
 
                 implementation("ch.tutteli.atrium:atrium-fluent-en_GB:0.13.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
             }
         }
 

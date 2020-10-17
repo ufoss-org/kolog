@@ -10,17 +10,17 @@ import org.slf4j.LoggerFactory
 import org.slf4j.Marker
 
 /**
- * Kotlin idiomatic logger based on
+ * Kotlin idiomatic logger for JVM based on Slf4j
  */
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
 public actual inline class Logger @PublishedApi internal constructor(
         public val platformLogger: PlatformLogger
-) {
+): Named {
     /**
      * Companion object for [Logger] class that contains its constructor functions
      * [withName] and [of].
      */
-    public companion object {
+    public actual companion object {
         /**
          * Return a logger named according to the name parameter
          *
@@ -29,21 +29,21 @@ public actual inline class Logger @PublishedApi internal constructor(
          */
         @Suppress("INAPPLICABLE_JVM_NAME", "NOTHING_TO_INLINE")
         @JvmName("withName")
-        public inline fun withName(name: String): Logger = Logger(LoggerFactory.getLogger(name))
+        public actual inline fun withName(name: String): Logger = Logger(LoggerFactory.getLogger(name))
 
         /**
          * Return a logger named corresponding to the class of the generic parameter
          */
         @Suppress("INAPPLICABLE_JVM_NAME")
         @JvmName("of")
-        public inline fun <reified T : Any> of(): Logger = Logger(LoggerFactory.getLogger(T::class.java))
+        public actual inline fun <reified T : Any> of(): Logger = Logger(LoggerFactory.getLogger(T::class.java))
     }
 
     /**
      * Return the name of this <code>Logger</code> instance.
      * @return name of this logger instance
      */
-    public val name: String get() = platformLogger.name
+    public override val name: String get() = platformLogger.name
 
     /**
      * Is the logger instance enabled for the TRACE level?
@@ -125,7 +125,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @param msg a function that returns the message to be logged
      */
-    public inline fun trace(msg: () -> Any?) {
+    public actual inline fun trace(msg: () -> Any?) {
         if (platformLogger.isTraceEnabled) {
             platformLogger.trace(msg().toString())
         }
@@ -137,7 +137,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      * @param t   the exception (throwable) to log
      * @param msg a function that returns the message accompanying the exception
      */
-    public inline fun trace(t: Throwable, msg: () -> Any?) {
+    public actual inline fun trace(t: Throwable, msg: () -> Any?) {
         if (platformLogger.isTraceEnabled) {
             platformLogger.trace(msg().toString(), t)
         }
@@ -175,7 +175,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @param msg a function that returns the message to be logged
      */
-    public inline fun debug(msg: () -> Any?) {
+    public actual inline fun debug(msg: () -> Any?) {
         if (platformLogger.isDebugEnabled) {
             platformLogger.debug(msg().toString())
         }
@@ -187,7 +187,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      * @param t   the exception (throwable) to log
      * @param msg a function that returns the message accompanying the exception
      */
-    public inline fun debug(t: Throwable, msg: () -> Any?) {
+    public actual inline fun debug(t: Throwable, msg: () -> Any?) {
         if (platformLogger.isDebugEnabled) {
             platformLogger.debug(msg().toString(), t)
         }
@@ -225,7 +225,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @param msg a function that returns the message to be logged
      */
-    public inline fun info(msg: () -> Any?) {
+    public actual inline fun info(msg: () -> Any?) {
         if (platformLogger.isInfoEnabled) {
             platformLogger.info(msg().toString())
         }
@@ -237,7 +237,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      * @param t   the exception (throwable) to log
      * @param msg a function that returns the message accompanying the exception
      */
-    public inline fun info(t: Throwable, msg: () -> Any?) {
+    public actual inline fun info(t: Throwable, msg: () -> Any?) {
         if (platformLogger.isInfoEnabled) {
             platformLogger.info(msg().toString(), t)
         }
@@ -275,7 +275,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @param msg a function that returns the message to be logged
      */
-    public inline fun warn(msg: () -> Any?) {
+    public actual inline fun warn(msg: () -> Any?) {
         if (platformLogger.isWarnEnabled) {
             platformLogger.warn(msg().toString())
         }
@@ -287,7 +287,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      * @param t   the exception (throwable) to log
      * @param msg a function that returns the message accompanying the exception
      */
-    public inline fun warn(t: Throwable, msg: () -> Any?) {
+    public actual inline fun warn(t: Throwable, msg: () -> Any?) {
         if (platformLogger.isWarnEnabled) {
             platformLogger.warn(msg().toString(), t)
         }
@@ -325,7 +325,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      *
      * @param msg a function that returns the message to be logged
      */
-    public inline fun error(msg: () -> Any?) {
+    public actual inline fun error(msg: () -> Any?) {
         if (platformLogger.isErrorEnabled) {
             platformLogger.error(msg().toString())
         }
@@ -337,7 +337,7 @@ public actual inline class Logger @PublishedApi internal constructor(
      * @param t   the exception (throwable) to log
      * @param msg a function that returns the message accompanying the exception
      */
-    public inline fun error(t: Throwable, msg: () -> Any?) {
+    public actual inline fun error(t: Throwable, msg: () -> Any?) {
         if (platformLogger.isErrorEnabled) {
             platformLogger.error(msg().toString(), t)
         }
