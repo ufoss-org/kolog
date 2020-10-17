@@ -1,8 +1,9 @@
 import net.researchgate.release.GitAdapter
 
 plugins {
-    kotlin("jvm") apply false
+    kotlin("multiplatform") apply false
     id("org.jetbrains.dokka") apply false
+    //id("com.android.library") apply false
     id("net.researchgate.release")
     id("maven-publish")
 }
@@ -35,6 +36,7 @@ subprojects {
     }
 
     repositories {
+        google()
         jcenter()
     }
 }

@@ -4,9 +4,10 @@
 
 package org.ufoss.kolog
 
+import ch.tutteli.atrium.api.fluent.en_GB.isEqualComparingTo
+import ch.tutteli.atrium.api.verbs.assertThat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class LoggerTest {
@@ -14,19 +15,19 @@ class LoggerTest {
     @Test
     fun `verify name is the name passed to Logger`() {
         val logger = Logger.withName("this.is.a.logger")
-        assertThat("this.is.a.logger").isEqualTo(logger.name)
+        assertThat("this.is.a.logger").isEqualComparingTo(logger.name)
     }
 
     @Test
     fun `verify name is the full name of the Class passed to Logger`() {
         val logger = Logger.of<TimeScope>()
-        assertThat("org.ufoss.kolog.TimeScope").isEqualTo(logger.name)
+        assertThat("org.ufoss.kolog.TimeScope").isEqualComparingTo(logger.name)
     }
 
     @Test
     fun `verify name is the full name of the invoking class`() {
         val logger = Logger()
-        assertThat("org.ufoss.kolog.LoggerTest").isEqualTo(logger.name)
+        assertThat("org.ufoss.kolog.LoggerTest").isEqualComparingTo(logger.name)
     }
 
     @Test
