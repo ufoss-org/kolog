@@ -62,3 +62,28 @@ public inline fun <T> Logger.debugTimeMillis(measuredName: String, block: TimeSc
         debug { "$measuredName is finished : ${start.elapsedNow().inMilliseconds} ms since start" }
     }
 }
+
+/**
+ * Executes the given [block] and logs at the INFO level the elapsed time in milliseconds.
+ *
+ * @param measuredName  The name of the task that will be logged
+ * @param block         The code block that will be time tracked
+ */
+public inline fun <T> Logger.infoTimeMillis(measuredName: String, block: TimeScope.() -> T): T {
+    contract {
+        callsInPlace(block, InvocationKind.EXACTLY_ONCE)
+    }
+
+    val start = TimeSource.Monotonic.markNow()
+    val timeScope: TimeScope = if (isInfoEnabled) {
+        var index = 1
+        TimeScope {
+            info { "$measuredName step ${index++} : ${start.elapsedNow().inMilliseconds} ms since start" }
+        }
+    } else {
+        NoopTimeScope
+    }
+    return block(timeScope).apply {
+        info { "$measuredName is finished : ${start.elapsedNow().inMilliseconds} ms since start" }
+    }
+}

@@ -8,32 +8,32 @@ import ch.tutteli.atrium.api.fluent.en_GB.isEqualComparingTo
 import ch.tutteli.atrium.api.verbs.assertThat
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.*
-import kotlin.test.*
+import kotlin.test.Test
 
-class LoggerTest {
+abstract class LoggerTest {
 
     @Test
-    fun `verify name is the name passed to Logger`() {
+    fun verifyNameIsTheNamePassedToLogger() {
         val logger = Logger.withName("this.is.a.logger")
         assertThat("this.is.a.logger").isEqualComparingTo(logger.name)
     }
 
     @Test
-    fun `verify name is the full name of the Class passed to Logger`() {
+    fun verifyNameIsTheFullNameOfTheClassPassedToLogger() {
         val logger = Logger.of<Logger>()
         assertThat("org.ufoss.kolog.Logger").isEqualComparingTo(logger.name)
     }
 
     @Test
-    fun `verify name is the full name of the invoking class`() {
+    fun verifyNameIsTheFullNameOfTheInvokingClass() {
         val logger = Logger()
         assertThat("org.ufoss.kolog.LoggerTest").isEqualComparingTo(logger.name)
     }
 
     @Test
-    fun `verify traceTimeMillis is working`() = runBlockingTest {
+    fun verifyInfoTimeMillisIsWorking() = runBlockingTest {
         val logger = Logger.withName("org.ufoss.kolog.Test")
-        logger.traceTimeMillis("my test operation") {
+        logger.infoTimeMillis("my test operation") {
             delay(50)
             printTime()
             delay(50)
@@ -41,9 +41,9 @@ class LoggerTest {
     }
 
     @Test
-    fun `verify traceTimeMillis is working (no-op)`() = runBlockingTest {
+    fun verifyInfoTimeMillisIsWorking_noOpCase() = runBlockingTest {
         val logger = Logger.withName("not.existing.Class")
-        logger.traceTimeMillis("my test operation") {
+        logger.infoTimeMillis("my test operation") {
             delay(50)
             printTime()
             delay(50)

@@ -6,9 +6,9 @@ package org.ufoss.kolog
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 
-class JvmLoggerTest {
+class JvmLoggerTest : LoggerTest() {
 
     @Test
     fun `verify traceTimeMillis is working real delay`() = runBlocking {

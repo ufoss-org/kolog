@@ -27,3 +27,6 @@ out
 
 ### VS Code ###
 .vscode/
+
+# android
+local.properties

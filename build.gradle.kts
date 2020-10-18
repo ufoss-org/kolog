@@ -4,7 +4,7 @@ plugins {
     kotlin("multiplatform") apply false
     kotlin("jvm") apply false
     id("org.jetbrains.dokka") apply false
-    //id("com.android.library") apply false
+    id("com.android.library") apply false
     id("net.researchgate.release")
     id("maven-publish")
 }
@@ -52,7 +52,7 @@ tasks.withType<GradleBuild> {
 }
 
 tasks.register("build") {
-    dependsOn(subprojects.mapNotNull { it.tasks.findByName("build") }.toTypedArray())
+    dependsOn(subprojects.map { it.tasks.findByName("build") }.toTypedArray())
 }
 
 release {

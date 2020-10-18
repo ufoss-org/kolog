@@ -6,4 +6,4 @@ package org.ufoss.kolog
 
 import org.slf4j.Logger
 
-public actual typealias PlatformLogger = Logger
+public actual typealias Parameter = Logger

@@ -4,4 +4,4 @@
 
 package org.ufoss.kolog
 
-public expect interface PlatformLogger
+public actual typealias Parameter = CharSequence

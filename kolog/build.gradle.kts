@@ -3,11 +3,11 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
+    id("com.android.library")
     kotlin("multiplatform")
     id("org.jetbrains.dokka")
-    //id("com.android.library")
-    //id("kotlin-android-extensions")
 }
+
 
 println("Using Gradle version: ${gradle.gradleVersion}")
 println("Using Kotlin compiler version: ${KotlinCompilerVersion.VERSION}")
@@ -42,17 +42,21 @@ kotlin {
         }
     }
 
+    android {
+        publishAllLibraryVariants()
+    }
+
     sourceSets {
         val commonMain by getting
 
         val commonTest by getting {
             val kotlinxCoroutinesVersion: String by project
+            val atriumVersion: String by project
             dependencies {
-                implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
                 implementation(kotlin("reflect"))
 
-                implementation("ch.tutteli.atrium:atrium-fluent-en_GB:0.13.0")
+                implementation("ch.tutteli.atrium:atrium-fluent-en_GB:$atriumVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinxCoroutinesVersion")
             }
@@ -78,14 +82,15 @@ kotlin {
             }
         }
 
-        /*val androidMain by getting
+        val androidMain by getting
 
         val androidTest by getting {
             dependencies {
-                implementation("androidx.test:runner:1.2.0")
-                implementation("org.robolectric:robolectric:4.3.1")
+                implementation(kotlin("test-junit"))
+                implementation("androidx.test:runner:1.3.0")
+                implementation("org.robolectric:robolectric:4.4")
             }
-        }*/
+        }
     }
 
     configure(targets) {
@@ -145,18 +150,13 @@ tasks.withType<DokkaTask>().configureEach {
     }
 }
 
-/*
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(29)
-        versionCode = 1
-        versionName = "1.0"
+        minSdkVersion(15)
     }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
+
+    val main by sourceSets.getting {
+        manifest.srcFile("src/androidMain/AndroidManifest.xml")
     }
-}*/
+}
