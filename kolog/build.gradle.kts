@@ -46,6 +46,14 @@ kotlin {
         publishAllLibraryVariants()
     }
 
+    ios {
+        binaries {
+            framework {
+                baseName = "kolog"
+            }
+        }
+    }
+
     sourceSets {
         val commonMain by getting
 
@@ -91,6 +99,8 @@ kotlin {
                 implementation("org.robolectric:robolectric:4.4")
             }
         }
+
+        val iosMain by getting
     }
 
     configure(targets) {
