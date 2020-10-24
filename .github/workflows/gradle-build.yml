@@ -1,4 +1,4 @@
-name: Run Gradle on commit
+name: Test build on demand
 on: workflow_dispatch
 jobs:
   gradle:
