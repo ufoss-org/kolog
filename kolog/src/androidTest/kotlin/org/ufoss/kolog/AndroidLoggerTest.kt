@@ -4,17 +4,14 @@
 
 package org.ufoss.kolog
 
-import ch.tutteli.atrium.api.fluent.en_GB.all
-import ch.tutteli.atrium.api.fluent.en_GB.endsWith
-import ch.tutteli.atrium.api.fluent.en_GB.isEqualComparingTo
-import ch.tutteli.atrium.api.fluent.en_GB.startsWith
-import ch.tutteli.atrium.api.verbs.assertThat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.shadows.ShadowLog
 import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
 public class AndroidLoggerTest : LoggerTest() {
@@ -30,11 +27,13 @@ public class AndroidLoggerTest : LoggerTest() {
         }
         ShadowLog.getLogs().apply {
             val logsWithMessage = this.filter { it.tag == "org.ufoss.kolog.Test" }
-            assertThat(logsWithMessage.size).isEqualComparingTo(2)
-            assertThat(logsWithMessage.map { it.msg }).all {
-                startsWith(measuredName)
-                endsWith("ms since start")
-            }
+            assertEquals(logsWithMessage.size, 2)
+            logsWithMessage
+                    .map { it.msg }
+                    .forEach { message ->
+                        assertTrue(message.startsWith(measuredName))
+                        assertTrue(message.endsWith("ms since start"))
+                    }
         }
     }
 }
