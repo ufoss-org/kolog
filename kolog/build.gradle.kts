@@ -59,7 +59,6 @@ kotlin {
 
         val commonTest by getting {
             val kotlinxCoroutinesVersion: String by project
-            val atriumVersion: String by project
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
