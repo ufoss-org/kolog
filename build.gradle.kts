@@ -63,6 +63,6 @@ release {
 // when version changes :
 // -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
 tasks.wrapper {
-    gradleVersion = "6.7"
+    gradleVersion = "7.0"
     distributionType = Wrapper.DistributionType.ALL
 }

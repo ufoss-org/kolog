@@ -11,7 +11,7 @@ import android.util.Log
  */
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
 public actual inline class Logger @PublishedApi internal constructor(
-        private val parameter: Parameter
+        @PublishedApi internal val parameter: Parameter
 ) : LoggerProperties {
     /**
      * Companion object for [Logger] class that contains its constructor functions
