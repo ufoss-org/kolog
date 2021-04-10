@@ -99,72 +99,73 @@ kotlin {
         }
 
         val iosMain by getting
-}
+    }
 
-configure(targets) {
-mavenPublication {
-    pom {
-        description.set("kolog duty is to be the idiomatic way to log in Kotlin")
-        url.set("https://github.com/ufoss-org/kolog")
-        licenses {
-            license {
-                name.set("The Unlicence")
-                url.set("https://unlicense.org")
+    configure(targets) {
+        mavenPublication {
+            pom {
+                description.set("kolog duty is to be the idiomatic way to log in Kotlin")
+                url.set("https://github.com/ufoss-org/kolog")
+                licenses {
+                    license {
+                        name.set("The Unlicence")
+                        url.set("https://unlicense.org")
+                    }
+                }
+                scm {
+                    connection.set("scm:git:https://github.com/ufoss-org/kolog")
+                    developerConnection.set("scm:git:git@github.com:ufoss-org/kolog.git")
+                    url.set("https://github.com/ufoss-org/kolog")
+                }
             }
         }
-        scm {
-            connection.set("scm:git:git://github.com/ufoss-org/kolog.git")
-            url.set("https://github.com/ufoss-org/kolog.git")
+    }
+
+    sourceSets.all {
+        languageSettings.apply {
+            languageVersion = "1.4"
+            apiVersion = "1.4"
+            enableLanguageFeature("InlineClasses")
+            useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
+            useExperimentalAnnotation("kotlin.time.ExperimentalTime")
+            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
+            progressiveMode = true
         }
     }
-}
-}
-
-sourceSets.all {
-languageSettings.apply {
-    languageVersion = "1.4"
-    apiVersion = "1.4"
-    enableLanguageFeature("InlineClasses")
-    useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
-    useExperimentalAnnotation("kotlin.time.ExperimentalTime")
-    useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
-    progressiveMode = true
-}
-}
 }
 
 
 tasks.getByName<Test>("jvmTest") {
-useJUnitPlatform()
-testLogging {
-events = setOf(TestLogEvent.STARTED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
-showStandardStreams = true
-}
+    useJUnitPlatform()
+    testLogging {
+        events = setOf(TestLogEvent.STARTED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+        showStandardStreams = true
+    }
 }
 
 java {
-toolchain {
-languageVersion.set(JavaLanguageVersion.of(8))
-}
-}
-
-tasks.withType<DokkaTask>().configureEach {
-dokkaSourceSets {
-named("jvmMain") {
-    configureEach {
-        jdkVersion.set(8)
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
     }
-}
-}
 }
 
 android {
-compileSdkVersion(30)
-defaultConfig {
-minSdkVersion(15)
+    compileSdkVersion(30)
+    defaultConfig {
+        minSdkVersion(15)
+    }
+
+    val main by sourceSets.getting {
+        manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    }
 }
 
-val main by sourceSets.getting {
-manifest.srcFile("src/androidMain/AndroidManifest.xml")
-}
+tasks.withType<DokkaTask>().configureEach {
+    dokkaSourceSets {
+        named("jvmMain") {
+            configureEach {
+                jdkVersion.set(8)
+            }
+        }
+    }
 }

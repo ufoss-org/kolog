@@ -1,42 +1,57 @@
 import net.researchgate.release.GitAdapter
 
+val ossrhUsername = if (project.hasProperty("ossrhUsername")) {
+    project.property("ossrhUsername") as String?
+} else {
+    System.getenv("OSSRH_USERNAME")
+}
+val ossrhPassword = if (project.hasProperty("ossrhPassword")) {
+    project.property("bintray_api_key") as String?
+} else {
+    System.getenv("OSSRH_PASSWORD")
+}
+
 plugins {
     kotlin("multiplatform") apply false
     kotlin("jvm") apply false
     id("org.jetbrains.dokka") apply false
     id("com.android.library") apply false
+    `maven-publish`
+    signing
     id("net.researchgate.release")
-    id("maven-publish")
 }
 
 subprojects {
     apply(plugin = "maven-publish")
+    apply(plugin = "signing")
+
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // todo remove me when kotlinx-html is on maven central
+    }
 
     publishing {
         repositories {
             maven {
-                val user = "ufoss"
-                val repo = "ufoss"
-                val name = "kolog"
-                url = uri("https://api.bintray.com/maven/$user/$repo/$name/;publish=0")
+                if (project.version.toString().endsWith("SNAPSHOT")) {
+                    setUrl("https://s01.oss.sonatype.org/content/repositories/snapshots")
+                } else {
+                    setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
+                }
 
                 credentials {
-                    username =
-                            if (project.hasProperty("bintray_user")) project.property("bintray_user") as String? else System.getenv(
-                                    "BINTRAY_USER"
-                            )
-                    password =
-                            if (project.hasProperty("bintray_api_key")) project.property("bintray_api_key") as String? else System.getenv(
-                                    "BINTRAY_API_KEY"
-                            )
+                    username = ossrhUsername
+                    password = ossrhPassword
                 }
             }
         }
     }
 
-    repositories {
-        google()
-        jcenter()
+    signing {
+        // Require signing.keyId, signing.password and signing.secretKeyRingFile
+        //useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+        sign(publishing.publications)
     }
 }
 
@@ -45,17 +60,18 @@ fun CopySpec.setExecutablePermissions() {
     filesMatching("gradlew.bat") { mode = 0b110100100 }
 }
 
-// Workaround for project with modules https://github.com/researchgate/gradle-release/issues/144
-tasks.withType<GradleBuild> {
+/*tasks.withType<GradleBuild> {
     buildFile = file("build.gradle.kts")
     buildName = "kolog-build"
-}
+}*/
 
-tasks.register("build") {
+// Workaround for project with modules https://github.com/researchgate/gradle-release/issues/144
+tasks.register("releaseBuild") {
     dependsOn(subprojects.map { it.tasks.findByName("build") }.toTypedArray())
 }
 
 release {
+    buildTasks = listOf("releaseBuild")
     val git: GitAdapter.GitConfig = getProperty("git") as GitAdapter.GitConfig
     git.requireBranch = "main"
 }
