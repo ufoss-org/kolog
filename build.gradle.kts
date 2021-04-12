@@ -6,7 +6,7 @@ val ossrhUsername = if (project.hasProperty("ossrhUsername")) {
     System.getenv("OSSRH_USERNAME")
 }
 val ossrhPassword = if (project.hasProperty("ossrhPassword")) {
-    project.property("bintray_api_key") as String?
+    project.property("ossrhPassword") as String?
 } else {
     System.getenv("OSSRH_PASSWORD")
 }
@@ -35,14 +35,42 @@ subprojects {
         repositories {
             maven {
                 if (project.version.toString().endsWith("SNAPSHOT")) {
-                    setUrl("https://s01.oss.sonatype.org/content/repositories/snapshots")
+                    setUrl("https://s01.oss.sonatype.org/content/repositories/snapshots/")
                 } else {
-                    setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2")
+                    setUrl("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
                 }
 
                 credentials {
                     username = ossrhUsername
                     password = ossrhPassword
+                }
+            }
+        }
+
+        publications.withType<MavenPublication> {
+            pom {
+                name.set(project.name)
+                description.set("kolog duty is to be the idiomatic way to log in Kotlin")
+                url.set("https://github.com/ufoss-org/kolog")
+
+                licenses {
+                    license {
+                        name.set("The Unlicence")
+                        url.set("https://unlicense.org")
+                    }
+                }
+
+                developers {
+                    developer {
+                        name.set("pull-vert")
+                        url.set("https://github.com/pull-vert")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git:https://github.com/ufoss-org/kolog")
+                    developerConnection.set("scm:git:git@github.com:ufoss-org/kolog.git")
+                    url.set("https://github.com/ufoss-org/kolog")
                 }
             }
         }

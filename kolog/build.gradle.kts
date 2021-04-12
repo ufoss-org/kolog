@@ -101,26 +101,6 @@ kotlin {
         val iosMain by getting
     }
 
-    configure(targets) {
-        mavenPublication {
-            pom {
-                description.set("kolog duty is to be the idiomatic way to log in Kotlin")
-                url.set("https://github.com/ufoss-org/kolog")
-                licenses {
-                    license {
-                        name.set("The Unlicence")
-                        url.set("https://unlicense.org")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/ufoss-org/kolog")
-                    developerConnection.set("scm:git:git@github.com:ufoss-org/kolog.git")
-                    url.set("https://github.com/ufoss-org/kolog")
-                }
-            }
-        }
-    }
-
     sourceSets.all {
         languageSettings.apply {
             languageVersion = "1.4"
