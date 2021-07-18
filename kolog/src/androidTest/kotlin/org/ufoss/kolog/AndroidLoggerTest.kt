@@ -17,7 +17,7 @@ import kotlin.test.assertTrue
 public class AndroidLoggerTest : LoggerTest() {
 
     @Test
-    public fun `verify infoTimeMillis is working`(): Unit = runBlocking {
+    public fun verifyInfoTimeMillisIsWorkingRealDelay(): Unit = runBlocking {
         val logger = Logger.withName("org.ufoss.kolog.Test")
         val measuredName = "my test operation"
         logger.infoTimeMillis(measuredName) {

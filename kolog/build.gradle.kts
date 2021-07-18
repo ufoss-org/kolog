@@ -69,7 +69,6 @@ kotlin {
                 implementation(kotlin("reflect"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${findProperty("kotlinx.coroutines.version")}")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${findProperty("kotlinx.coroutines.version")}")
             }
         }
 
@@ -111,7 +110,6 @@ kotlin {
             apiVersion = "1.5"
             useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
             useExperimentalAnnotation("kotlin.time.ExperimentalTime")
-            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
             progressiveMode = true
         }
     }

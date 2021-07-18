@@ -6,8 +6,6 @@ package org.ufoss.kolog
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.delay
 
 abstract class LoggerTest {
 
@@ -29,7 +27,7 @@ abstract class LoggerTest {
         assertEquals("org.ufoss.kolog.LoggerTest", logger.name)
     }
 
-    @Test
+    /*@Test
     fun verifyInfoTimeMillisIsWorking() = runBlockingTest {
         val logger = Logger.withName("org.ufoss.kolog.Test")
         logger.infoTimeMillis("my test operation") {
@@ -47,5 +45,5 @@ abstract class LoggerTest {
             printTime()
             delay(50)
         }
-    }
+    }*/
 }
