@@ -98,7 +98,7 @@ tasks.register("releaseBuild") {
 
 release {
     buildTasks = listOf("releaseBuild")
-    val git: GitAdapter.GitConfig = getProperty("git") as GitAdapter.GitConfig
+    val git = getProperty("git") as GitAdapter.GitConfig
     git.requireBranch = "main"
 }
 

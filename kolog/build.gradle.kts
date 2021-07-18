@@ -1,6 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     id("com.android.library")
@@ -44,7 +45,13 @@ kotlin {
         publishAllLibraryVariants()
     }
 
-    ios {
+    val iosTarget: (String, KotlinNativeTarget.() -> Unit) -> KotlinNativeTarget =
+        if (System.getenv("SDK_NAME")?.startsWith("iphoneos") == true)
+            ::iosArm64
+        else
+            ::iosX64
+
+    iosTarget("ios") {
         binaries {
             framework {
                 baseName = "kolog"
@@ -117,6 +124,16 @@ tasks.getByName<Test>("jvmTest") {
     }
 }
 
+tasks.withType<DokkaTask>().configureEach {
+    dokkaSourceSets {
+        named("jvmMain") {
+            configureEach {
+                jdkVersion.set(8)
+            }
+        }
+    }
+}
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(8))
@@ -134,12 +151,16 @@ android {
     }
 }
 
-tasks.withType<DokkaTask>().configureEach {
-    dokkaSourceSets {
-        named("jvmMain") {
-            configureEach {
-                jdkVersion.set(8)
-            }
-        }
-    }
+val packForXcode by tasks.creating(Sync::class) {
+    val mode = System.getenv("CONFIGURATION") ?: "DEBUG"
+    val framework = kotlin.targets.getByName<KotlinNativeTarget>("ios").binaries.getFramework(mode)
+    val targetDir = File(buildDir, "xcode-frameworks")
+
+    group = "build"
+    dependsOn(framework.linkTask)
+    inputs.property("mode", mode)
+
+    from({ framework.outputDirectory })
+    into(targetDir)
 }
+tasks.getByName("build").dependsOn(packForXcode)
