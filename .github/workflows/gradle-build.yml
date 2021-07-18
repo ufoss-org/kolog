@@ -24,8 +24,8 @@ jobs:
         with:
           path: |
               ~/.konan/dependencies
-              ~/.konan/kotlin-native-prebuilt-macos-1.4.10
-          key: ${{ runner.os }}-konan-1.4.10
-          restore-keys: ${{ runner.os }}-konan-1.4.10
+              ~/.konan/kotlin-native-prebuilt-macos-1.5.21
+          key: ${{ runner.os }}-konan-1.5.21
+          restore-keys: ${{ runner.os }}-konan-1.5.21
       - name: Build with Gradle
-        run: ./gradlew -Dorg.gradle.daemon=false clean buildNeeded --build-cache
+        run: ./gradlew -Dorg.gradle.daemon=false clean build --build-cache
