@@ -11,6 +11,7 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.jvm.JvmMultifileClass
 import kotlin.jvm.JvmName
+import kotlin.time.DurationUnit
 import kotlin.time.TimeSource
 
 /**
@@ -28,13 +29,13 @@ public inline fun <T> Logger.traceTimeMillis(measuredName: String, block: TimeSc
     val timeScope: TimeScope = if (isTraceEnabled) {
         var index = 1
         TimeScope {
-            trace { "$measuredName step ${index++} : ${start.elapsedNow().inMilliseconds} ms since start" }
+            trace { "$measuredName step ${index++} : ${start.elapsedNow().toDouble(DurationUnit.MILLISECONDS)} ms since start" }
         }
     } else {
         NoopTimeScope
     }
     return block(timeScope).apply {
-        trace { "$measuredName is finished : ${start.elapsedNow().inMilliseconds} ms since start" }
+        trace { "$measuredName is finished : ${start.elapsedNow().toDouble(DurationUnit.MILLISECONDS)} ms since start" }
     }
 }
 
@@ -53,13 +54,13 @@ public inline fun <T> Logger.debugTimeMillis(measuredName: String, block: TimeSc
     val timeScope: TimeScope = if (isDebugEnabled) {
         var index = 1
         TimeScope {
-            debug { "$measuredName step ${index++} : ${start.elapsedNow().inMilliseconds} ms since start" }
+            debug { "$measuredName step ${index++} : ${start.elapsedNow().toDouble(DurationUnit.MILLISECONDS)} ms since start" }
         }
     } else {
         NoopTimeScope
     }
     return block(timeScope).apply {
-        debug { "$measuredName is finished : ${start.elapsedNow().inMilliseconds} ms since start" }
+        debug { "$measuredName is finished : ${start.elapsedNow().toDouble(DurationUnit.MILLISECONDS)} ms since start" }
     }
 }
 
@@ -78,12 +79,12 @@ public inline fun <T> Logger.infoTimeMillis(measuredName: String, block: TimeSco
     val timeScope: TimeScope = if (isInfoEnabled) {
         var index = 1
         TimeScope {
-            info { "$measuredName step ${index++} : ${start.elapsedNow().inMilliseconds} ms since start" }
+            info { "$measuredName step ${index++} : ${start.elapsedNow().toDouble(DurationUnit.MILLISECONDS)} ms since start" }
         }
     } else {
         NoopTimeScope
     }
     return block(timeScope).apply {
-        info { "$measuredName is finished : ${start.elapsedNow().inMilliseconds} ms since start" }
+        info { "$measuredName is finished : ${start.elapsedNow().toDouble(DurationUnit.MILLISECONDS)} ms since start" }
     }
 }

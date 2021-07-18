@@ -12,8 +12,9 @@ import org.slf4j.Marker
 /**
  * Kotlin idiomatic logger for JVM based on Slf4j
  */
+@JvmInline
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
-public actual inline class Logger @PublishedApi internal constructor(
+public actual value class Logger @PublishedApi internal constructor(
         @PublishedApi internal val parameter: Parameter
 ): LoggerProperties {
     /**

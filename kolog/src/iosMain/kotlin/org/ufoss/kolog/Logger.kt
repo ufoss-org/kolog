@@ -10,7 +10,7 @@ import platform.Foundation.NSLog
  * Kotlin idiomatic logger for Android based on Logcat
  */
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
-public actual inline class Logger @PublishedApi internal constructor(
+public actual value class Logger @PublishedApi internal constructor(
         @PublishedApi internal val parameter: Parameter
 ) : LoggerProperties {
     /**

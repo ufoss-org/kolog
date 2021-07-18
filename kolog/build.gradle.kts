@@ -19,14 +19,12 @@ kotlin {
         val main by compilations.getting {
             kotlinOptions {
                 freeCompilerArgs = listOf("-Xjvm-default=all")
-                jvmTarget = "1.8"
             }
         }
 
         val test by compilations.getting {
             kotlinOptions {
                 freeCompilerArgs = listOf("-Xjvm-default=all")
-                jvmTarget = "1.8"
             }
         }
 
@@ -58,20 +56,18 @@ kotlin {
         val commonMain by getting
 
         val commonTest by getting {
-            val kotlinxCoroutinesVersion: String by project
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
                 implementation(kotlin("reflect"))
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${findProperty("kotlinx.coroutines.version")}")
             }
         }
 
         val jvmMain by getting {
-            val slf4jVersion: String by project
             dependencies {
-                api("org.slf4j:slf4j-api:$slf4jVersion")
+                api("org.slf4j:slf4j-api:${findProperty("slf4j.version")}")
             }
         }
 
@@ -81,10 +77,10 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-junit5"))
 
-                implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+                implementation("org.junit.jupiter:junit-jupiter-api:${findProperty("junit.version")}")
 
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-                runtimeOnly("ch.qos.logback:logback-classic:$logbackVersion")
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:${findProperty("junit.version")}")
+                runtimeOnly("ch.qos.logback:logback-classic:${findProperty("logback.version")}")
             }
         }
 
@@ -93,7 +89,7 @@ kotlin {
         val androidTest by getting {
             dependencies {
                 implementation(kotlin("test-junit"))
-                implementation("androidx.test:runner:1.3.0")
+                implementation("androidx.test:runner:1.4.0")
                 implementation("org.robolectric:robolectric:4.4")
             }
         }
@@ -103,12 +99,10 @@ kotlin {
 
     sourceSets.all {
         languageSettings.apply {
-            languageVersion = "1.4"
-            apiVersion = "1.4"
-            enableLanguageFeature("InlineClasses")
+            languageVersion = "1.5"
+            apiVersion = "1.5"
             useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
             useExperimentalAnnotation("kotlin.time.ExperimentalTime")
-            useExperimentalAnnotation("kotlinx.coroutines.ExperimentalCoroutinesApi")
             progressiveMode = true
         }
     }

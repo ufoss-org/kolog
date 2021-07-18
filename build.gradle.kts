@@ -28,7 +28,6 @@ subprojects {
     repositories {
         google()
         mavenCentral()
-        jcenter() // todo remove me when kotlinx-html is on maven central
     }
 
     publishing {
@@ -78,7 +77,6 @@ subprojects {
 
     signing {
         // Require signing.keyId, signing.password and signing.secretKeyRingFile
-        //useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
         sign(publishing.publications)
     }
 }
@@ -107,6 +105,6 @@ release {
 // when version changes :
 // -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
 tasks.wrapper {
-    gradleVersion = "7.0"
+    gradleVersion = "7.1.1"
     distributionType = Wrapper.DistributionType.ALL
 }
