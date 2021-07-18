@@ -5,3 +5,6 @@
 # kolog
 
 kolog duty is to be the idiomatic way to log in Kotlin.
+
+## useful link
+[KMM production sample](https://github.com/Kotlin/kmm-production-sample)
