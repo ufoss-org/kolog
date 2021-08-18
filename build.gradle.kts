@@ -86,11 +86,6 @@ fun CopySpec.setExecutablePermissions() {
     filesMatching("gradlew.bat") { mode = 0b110100100 }
 }
 
-/*tasks.withType<GradleBuild> {
-    buildFile = file("build.gradle.kts")
-    buildName = "kolog-build"
-}*/
-
 // Workaround for project with modules https://github.com/researchgate/gradle-release/issues/144
 tasks.register("releaseBuild") {
     dependsOn(subprojects.map { it.tasks.findByName("build") }.toTypedArray())

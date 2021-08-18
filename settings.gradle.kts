@@ -10,17 +10,12 @@ pluginManagement {
     val kotlinVersion: String by settings
     val dokkaPluginVersion: String by settings
     val releasePluginVersion: String by settings
-    val androidLibraryPluginVersion: String by settings
-    resolutionStrategy {
-        eachPlugin {
-            when (requested.id.id) {
-                "com.android.library" -> useModule("com.android.tools.build:gradle:${androidLibraryPluginVersion}")
-            }
-        }
-    }
+    val androidGradlePlugin: String by settings
+
     plugins {
         kotlin("multiplatform") version kotlinVersion
         kotlin("jvm") version kotlinVersion
+        id("com.android.library") version androidGradlePlugin
         id("org.jetbrains.dokka") version dokkaPluginVersion
         id("net.researchgate.release") version releasePluginVersion
     }

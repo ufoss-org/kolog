@@ -4,8 +4,8 @@ import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
-    id("com.android.library")
     kotlin("multiplatform")
+    id("com.android.library")
     id("org.jetbrains.dokka")
 }
 
@@ -79,8 +79,6 @@ kotlin {
         }
 
         val jvmTest by getting {
-            val junitVersion: String by project
-            val logbackVersion: String by project
             dependencies {
                 implementation(kotlin("test-junit5"))
 
@@ -141,14 +139,13 @@ java {
 }
 
 android {
-    compileSdkVersion(30)
-    defaultConfig {
-        minSdkVersion(15)
-    }
+    compileSdk = (findProperty("android.compileSdk") as String).toInt()
 
-    val main by sourceSets.getting {
-        manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    defaultConfig {
+        minSdk = (findProperty("android.minSdk") as String).toInt()
+        targetSdk = (findProperty("android.targetSdk") as String).toInt()
     }
+    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 }
 
 val packForXcode by tasks.creating(Sync::class) {
