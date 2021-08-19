@@ -17,6 +17,10 @@ kotlin {
     explicitApi()
 
     jvm {
+        testRuns["test"].executionTask.configure {
+            useJUnitPlatform()
+        }
+
         val main by compilations.getting {
             kotlinOptions {
                 freeCompilerArgs = listOf("-Xjvm-default=all")
@@ -64,9 +68,7 @@ kotlin {
 
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-                implementation(kotlin("reflect"))
+                implementation(kotlin("test"))
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${findProperty("kotlinx.coroutines.version")}")
             }
@@ -80,8 +82,6 @@ kotlin {
 
         val jvmTest by getting {
             dependencies {
-                implementation(kotlin("test-junit5"))
-
                 implementation("org.junit.jupiter:junit-jupiter-api:${findProperty("junit.version")}")
 
                 runtimeOnly("org.junit.jupiter:junit-jupiter-engine:${findProperty("junit.version")}")
@@ -93,7 +93,6 @@ kotlin {
 
         val androidTest by getting {
             dependencies {
-                implementation(kotlin("test-junit"))
                 implementation("androidx.test:runner:1.4.0")
                 implementation("org.robolectric:robolectric:4.4")
             }
@@ -113,9 +112,7 @@ kotlin {
     }
 }
 
-
-tasks.getByName<Test>("jvmTest") {
-    useJUnitPlatform()
+tasks.withType<Test> {
     testLogging {
         events = setOf(TestLogEvent.STARTED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
         showStandardStreams = true
