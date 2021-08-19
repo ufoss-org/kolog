@@ -90,7 +90,7 @@ subprojects {
         /*// Require signing.keyId, signing.password and signing.secretKeyRingFile
         sign(publishing.publications)*/
         useInMemoryPgpKeys(signingKey, signingPassword)
-        sign(tasks["stuffZip"])
+        sign(publishing.publications)
     }
 }
 
