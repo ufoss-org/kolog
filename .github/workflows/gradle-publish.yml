@@ -1,4 +1,4 @@
-name: Test publish on demand
+name: Publish on demand
 on: workflow_dispatch
 jobs:
   build-osx:

@@ -1,4 +1,4 @@
-name: Test build on demand
+name: Build on demand
 on: workflow_dispatch
 jobs:
   build-osx:

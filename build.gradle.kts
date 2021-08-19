@@ -1,6 +1,6 @@
 import net.researchgate.release.GitAdapter
 
-/*val ossrhUsername = if (project.hasProperty("ossrhUsername")) {
+val ossrhUsername = if (project.hasProperty("ossrhUsername")) {
     project.property("ossrhUsername") as String?
 } else {
     System.getenv("OSSRH_USERNAME")
@@ -9,7 +9,7 @@ val ossrhPassword = if (project.hasProperty("ossrhPassword")) {
     project.property("ossrhPassword") as String?
 } else {
     System.getenv("OSSRH_PASSWORD")
-}*/
+}
 
 plugins {
     kotlin("multiplatform") apply false
@@ -40,8 +40,6 @@ subprojects {
                 }
 
                 credentials {
-                    val ossrhUsername: String by project
-                    val ossrhPassword: String by project
                     username = ossrhUsername
                     password = ossrhPassword
                 }
