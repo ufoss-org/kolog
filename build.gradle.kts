@@ -11,6 +11,17 @@ val ossrhPassword = if (project.hasProperty("ossrhPassword")) {
     System.getenv("OSSRH_PASSWORD")
 }
 
+val signingKey = if (project.hasProperty("signingKey")) {
+    project.property("signingKey") as String?
+} else {
+    System.getenv("GPG_SIGNING_KEY")
+}
+val signingPassword = if (project.hasProperty("signingPassword")) {
+    project.property("signingPassword") as String?
+} else {
+    System.getenv("GPG_SIGNING_PASSWORD")
+}
+
 plugins {
     kotlin("multiplatform") apply false
     kotlin("jvm") apply false
@@ -78,8 +89,6 @@ subprojects {
     signing {
         /*// Require signing.keyId, signing.password and signing.secretKeyRingFile
         sign(publishing.publications)*/
-        val signingKey: String by project
-        val signingPassword: String by project
         useInMemoryPgpKeys(signingKey, signingPassword)
         sign(tasks["stuffZip"])
     }
