@@ -1,5 +1,3 @@
-import net.researchgate.release.GitAdapter
-
 val ossrhUsername = if (project.hasProperty("ossrhUsername")) {
     project.property("ossrhUsername") as String?
 } else {
@@ -105,14 +103,12 @@ tasks.register("releaseBuild") {
 }
 
 release {
-    buildTasks = listOf("releaseBuild")
-    val git = getProperty("git") as GitAdapter.GitConfig
-    git.requireBranch = "main"
+    buildTasks.set(listOf("releaseBuild"))
 }
 
 // when version changes :
 // -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
 tasks.wrapper {
-    gradleVersion = "7.1.1"
+    gradleVersion = "7.5.1"
     distributionType = Wrapper.DistributionType.ALL
 }

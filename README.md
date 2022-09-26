@@ -8,3 +8,6 @@ kolog duty is to be the idiomatic way to log in Kotlin.
 
 ## useful link
 [KMM production sample](https://github.com/Kotlin/kmm-production-sample)
+
+## install
+You must download a Android SDK : settings -> Android SDK -> edit and then install

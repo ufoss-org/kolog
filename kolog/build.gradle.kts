@@ -17,8 +17,15 @@ kotlin {
     explicitApi()
 
     jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "11"
+        }
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
+            testLogging {
+                events = setOf(TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+                showStandardStreams = true
+            }
         }
 
         val main by compilations.getting {
@@ -64,6 +71,21 @@ kotlin {
     }
 
     sourceSets {
+        // add explicit-api option for all Main sourceSets
+        matching { it.name.contains("Main") }.all {
+            project.ext.set("kotlin.mpp.freeCompilerArgsForSourceSet.${this.name}", arrayOf("-Xexplicit-api=strict"))
+        }
+
+        all {
+            languageSettings.apply {
+                languageVersion = "1.7"
+                apiVersion = "1.7"
+                optIn("kotlin.contracts.ExperimentalContracts")
+                optIn("kotlin.time.ExperimentalTime")
+                progressiveMode = true
+            }
+        }
+
         val commonMain by getting
 
         val commonTest by getting {
@@ -99,16 +121,6 @@ kotlin {
         }
 
         val iosMain by getting
-    }
-
-    sourceSets.all {
-        languageSettings.apply {
-            languageVersion = "1.5"
-            apiVersion = "1.5"
-            useExperimentalAnnotation("kotlin.contracts.ExperimentalContracts")
-            useExperimentalAnnotation("kotlin.time.ExperimentalTime")
-            progressiveMode = true
-        }
     }
 }
 
