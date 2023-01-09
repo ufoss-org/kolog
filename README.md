@@ -4,7 +4,7 @@
 
 # kolog
 
-kolog duty is to be the idiomatic way to log in Kotlin.
+kolog duty is to be a multiplatform library that provides the idiomatic way of loging.
 
 ## useful link
 [KMM production sample](https://github.com/Kotlin/kmm-production-sample)
