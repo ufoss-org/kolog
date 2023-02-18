@@ -9,16 +9,16 @@ val ossrhPassword = if (project.hasProperty("ossrhPassword")) {
     System.getenv("OSSRH_PASSWORD")
 }
 
-//val signingKey = if (project.hasProperty("signingKey")) {
-//    project.property("signingKey") as String?
-//} else {
-//    System.getenv("GPG_SIGNING_KEY")
-//}
-//val signingPassword = if (project.hasProperty("signingPassword")) {
-//    project.property("signingPassword") as String?
-//} else {
-//    System.getenv("GPG_SIGNING_PASSWORD")
-//}
+val signingKey = if (project.hasProperty("signingKey")) {
+    project.property("signingKey") as String?
+} else {
+    System.getenv("GPG_SIGNING_KEY")
+}
+val signingPassword = if (project.hasProperty("signingPassword")) {
+    project.property("signingPassword") as String?
+} else {
+    System.getenv("GPG_SIGNING_PASSWORD")
+}
 
 val jpmsAsString: String? = System.getProperty("jpms")
 var isJpms: Boolean? = null
@@ -95,17 +95,12 @@ subprojects {
     }
 
     signing {
-        // Require signing.keyId, signing.password and signing.secretKeyRingFile
+        // To publish to maven local, comment next line. Then it requires signing.keyId, signing.password and
+        // signing.secretKeyRingFile
+        useInMemoryPgpKeys(signingKey, signingPassword)
         sign(publishing.publications)
-//        useInMemoryPgpKeys(signingKey, signingPassword)
-//        sign(publishing.publications)
     }
 }
-
-//fun CopySpec.setExecutablePermissions() {
-//    filesMatching("gradlew") { mode = 0b111101101 }
-//    filesMatching("gradlew.bat") { mode = 0b110100100 }
-//}
 
 // Workaround for project with modules https://github.com/researchgate/gradle-release/issues/144
 tasks.register("releaseBuild") {

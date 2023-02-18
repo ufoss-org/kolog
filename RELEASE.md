@@ -1,6 +1,7 @@
 ## Release
 * Go to github actions : https://github.com/ufoss-org/kolog/actions
-* Execute 'Publish on demand'
+* Execute 'Publish on demand' (no need for build, because it builds before publishing, so it would fail before doing
+anything important)
 * When finished, go to staging repos : https://s01.oss.sonatype.org/#stagingRepositories (ufoss account)
   * do **close** , refresh
   * then **release**
