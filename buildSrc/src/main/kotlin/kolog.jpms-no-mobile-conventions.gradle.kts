@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -55,19 +56,27 @@ kotlin {
             useJUnitPlatform()
             testLogging {
                 events = setOf(TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
+                exceptionFormat = TestExceptionFormat.FULL
                 showStandardStreams = true
             }
         }
 
-        // Generate and add Javadoc jar in jvm artefacts
-        val dokkaJar = tasks.create<Jar>("dokkaJar") {
-            dependsOn("dokkaHtml")
+        // Generate and add javadoc and html-doc jars in jvm artefacts
+        val dokkaJavadocJar by tasks.register<Jar>("dokkaJavadocJar") {
+            dependsOn(tasks.dokkaJavadoc)
+            from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
             archiveClassifier.set("javadoc")
-            from(buildDir.resolve("dokka/html"))
+        }
+
+        val dokkaHtmlJar by tasks.register<Jar>("dokkaHtmlJar") {
+            dependsOn(tasks.dokkaHtml)
+            from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+            archiveClassifier.set("html-doc")
         }
 
         mavenPublication {
-            artifact(dokkaJar)
+            artifact(dokkaJavadocJar)
+            artifact(dokkaHtmlJar)
         }
     }
 
