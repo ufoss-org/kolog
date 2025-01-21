@@ -12,7 +12,7 @@ import platform.Foundation.NSLog
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
 public actual value class Logger @PublishedApi internal constructor(
         @PublishedApi internal val parameter: Parameter
-) : LoggerProperties {
+) {
     /**
      * Companion object for [Logger] class that contains its constructor functions
      * [withName] and [of].
@@ -32,47 +32,6 @@ public actual value class Logger @PublishedApi internal constructor(
          */
         public actual inline fun <reified T : Any> of(): Logger = Logger(T::class.qualifiedName!!)
     }
-
-    /**
-     * Return the name of this <code>Logger</code> instance.
-     * @return name of this logger instance
-     */
-    public override val name: String get() = parameter as String
-
-    /**
-     * Is the logger instance enabled for the TRACE level?
-     *
-     * @return True if this Logger is enabled for the TRACE level, false otherwise.
-     */
-    public override val isTraceEnabled: Boolean get() = true
-
-    /**
-     * Is the logger instance enabled for the DEBUG level?
-     *
-     * @return True if this Logger is enabled for the DEBUG level, false otherwise.
-     */
-    public override val isDebugEnabled: Boolean get() = true
-
-    /**
-     * Is the logger instance enabled for the INFO level?
-     *
-     * @return True if this Logger is enabled for the INFO level, false otherwise.
-     */
-    public override val isInfoEnabled: Boolean get() = true
-
-    /**
-     * Is the logger instance enabled for the WARN level?
-     *
-     * @return True if this Logger is enabled for the WARN level, false otherwise.
-     */
-    public override val isWarnEnabled: Boolean get() = true
-
-    /**
-     * Is the logger instance enabled for the ERROR level?
-     *
-     * @return True if this Logger is enabled for the ERROR level, false otherwise.
-     */
-    public override val isErrorEnabled: Boolean get() = true
 
     /**
      * Log a message at the TRACE level.
@@ -194,3 +153,50 @@ public actual value class Logger @PublishedApi internal constructor(
         }
     }
 }
+
+/**
+ * @return the name of this <code>Logger</code> instance.
+ */
+public actual val Logger.name: String
+    get() = parameter as String
+
+/**
+ * Is the logger instance enabled for the TRACE level?
+ *
+ * @return True if this Logger is enabled for the TRACE level, false otherwise.
+ */
+public actual val Logger.isTraceEnabled: Boolean
+    get() = true
+
+/**
+ * Is the logger instance enabled for the DEBUG level?
+ *
+ * @return True if this Logger is enabled for the DEBUG level, false otherwise.
+ */
+public actual val Logger.isDebugEnabled: Boolean
+    get() = true
+
+/**
+ * Is the logger instance enabled for the INFO level?
+ *
+ * @return True if this Logger is enabled for the INFO level, false otherwise.
+ */
+public actual val Logger.isInfoEnabled: Boolean
+    get() = true
+
+/**
+ * Is the logger instance enabled for the WARN level?
+ *
+ * @return True if this Logger is enabled for the WARN level, false otherwise.
+ */
+public actual val Logger.isWarnEnabled: Boolean
+    get() = true
+
+/**
+ * Is the logger instance enabled for the ERROR level?
+ *
+ * @return True if this Logger is enabled for the ERROR level, false otherwise.
+ */
+public actual val Logger.isErrorEnabled: Boolean
+    get() = true
+

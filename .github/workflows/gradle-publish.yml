@@ -24,9 +24,9 @@ jobs:
         with:
           path: |
               ~/.konan/dependencies
-              ~/.konan/kotlin-native-prebuilt-macos-1.8.10
-          key: ${{ runner.os }}-konan-1.8.10
-          restore-keys: ${{ runner.os }}-konan-1.8.10
+              ~/.konan/kotlin-native-prebuilt-macos-2.1.0
+          key: ${{ runner.os }}-konan-2.1.0
+          restore-keys: ${{ runner.os }}-konan-2.1.0
       - name: Build Mobile only
         run: ./gradlew -Dorg.gradle.daemon=false clean build -Djpms=false --build-cache
       - name: Build JPMS (Jigsaw JVM only)

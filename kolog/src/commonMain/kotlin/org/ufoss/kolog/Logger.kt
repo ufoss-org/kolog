@@ -10,7 +10,7 @@ import kotlin.jvm.JvmInline
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
 public expect value class Logger internal constructor(
         internal val parameter: Parameter
-): LoggerProperties {
+) {
     /**
      * Companion object for [Logger] class that contains its constructor functions
      * [withName] and [of].
@@ -105,3 +105,43 @@ public expect value class Logger internal constructor(
      */
     public inline fun error(t: Throwable, msg: () -> Any?)
 }
+
+/**
+ * @return the name of this <code>Logger</code> instance.
+ */
+public expect val Logger.name: String
+
+/**
+ * Is the logger instance enabled for the TRACE level?
+ *
+ * @return True if this Logger is enabled for the TRACE level, false otherwise.
+ */
+public expect val Logger.isTraceEnabled: Boolean
+
+/**
+ * Is the logger instance enabled for the DEBUG level?
+ *
+ * @return True if this Logger is enabled for the DEBUG level, false otherwise.
+ */
+public expect val Logger.isDebugEnabled: Boolean
+
+/**
+ * Is the logger instance enabled for the INFO level?
+ *
+ * @return True if this Logger is enabled for the INFO level, false otherwise.
+ */
+public expect val Logger.isInfoEnabled: Boolean
+
+/**
+ * Is the logger instance enabled for the WARN level?
+ *
+ * @return True if this Logger is enabled for the WARN level, false otherwise.
+ */
+public expect val Logger.isWarnEnabled: Boolean
+
+/**
+ * Is the logger instance enabled for the ERROR level?
+ *
+ * @return True if this Logger is enabled for the ERROR level, false otherwise.
+ */
+public expect val Logger.isErrorEnabled: Boolean

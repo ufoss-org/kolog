@@ -20,30 +20,16 @@ val signingPassword = if (project.hasProperty("signingPassword")) {
     System.getenv("GPG_SIGNING_PASSWORD")
 }
 
-val jpmsAsString: String? = System.getProperty("jpms")
-var isJpms: Boolean? = null
-if (jpmsAsString != null) {
-    isJpms = jpmsAsString.toBoolean()
-}
-
 plugins {
     `maven-publish`
     signing
-    id("net.researchgate.release")
-}
+    alias(libs.plugins.release)
 
-repositories {
-    mavenCentral()
+    alias(libs.plugins.android) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
 }
 
 subprojects {
-    // uncomment for editing module-info.java
-//    apply(plugin = "kolog.jpms-no-mobile-conventions")
-    when (isJpms) {
-        true -> apply(plugin = "kolog.jpms-no-mobile-conventions")
-        false -> apply(plugin = "kolog.client-only-conventions")
-        null -> apply(plugin = "kolog.dev-conventions")
-    }
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
 
@@ -114,6 +100,6 @@ release {
 // when version changes :
 // -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
 tasks.wrapper {
-    gradleVersion = "8.0"
+    gradleVersion = "8.12"
     distributionType = Wrapper.DistributionType.ALL
 }

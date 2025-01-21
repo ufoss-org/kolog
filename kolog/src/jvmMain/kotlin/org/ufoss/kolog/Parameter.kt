@@ -4,6 +4,4 @@
 
 package org.ufoss.kolog
 
-import org.slf4j.Logger
-
-public actual typealias Parameter = Logger
+public actual typealias Parameter = System.Logger

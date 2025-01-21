@@ -14,10 +14,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
-public class AndroidLoggerTest : LoggerTest() {
+class AndroidLoggerTest : LoggerTest() {
 
     @Test
-    public fun verifyInfoTimeMillisIsWorkingRealDelay(): Unit = runBlocking {
+    fun verifyInfoTimeMillisIsWorkingRealDelay(): Unit = runBlocking {
         val logger = Logger.withName("org.ufoss.kolog.Test")
         val measuredName = "my test operation"
         logger.infoTimeMillis(measuredName) {
@@ -27,13 +27,14 @@ public class AndroidLoggerTest : LoggerTest() {
         }
         ShadowLog.getLogs().apply {
             val logsWithMessage = this.filter { it.tag == "org.ufoss.kolog.Test" }
-            assertEquals(logsWithMessage.size, 2)
-            logsWithMessage
-                    .map { it.msg }
-                    .forEach { message ->
-                        assertTrue(message.startsWith(measuredName))
-                        assertTrue(message.endsWith("ms since start"))
-                    }
+            assertEquals(logsWithMessage.size, 3)
+            println(logsWithMessage[0].msg)
+            println(logsWithMessage[1].msg)
+            println(logsWithMessage[2].msg)
+            assertEquals(logsWithMessage[0].msg, "my test operation starting")
+            assertTrue(logsWithMessage[1].msg.startsWith("my test operation step 1 :"))
+            assertTrue(logsWithMessage[1].msg.endsWith("since start"))
+            assertTrue(logsWithMessage[2].msg.startsWith("my test operation is finished :"))
         }
     }
 }

@@ -1,15 +1,25 @@
+import org.gradle.api.GradleException
+import org.gradle.api.artifacts.VersionCatalog
+import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.assign
+import org.gradle.kotlin.dsl.getByType
+import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Strict
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_1
+import kotlin.jvm.optionals.getOrNull
+
 plugins {
     kotlin("multiplatform")
-    id("org.jetbrains.dokka")
     id("com.android.library")
     `maven-publish`
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
-    }
-}
+val versionCatalog: VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+fun catalogVersion(lib: String) =
+    versionCatalog.findVersion(lib).getOrNull()?.requiredVersion
+        ?: throw GradleException("Version '$lib' is not specified in the toml version catalog")
+
+val javaVersion = catalogVersion("java").toInt()
 
 repositories {
     google()
@@ -17,17 +27,21 @@ repositories {
 }
 
 kotlin {
-    explicitApi()
-
-    targets.all {
-        compilations.all {
-            kotlinOptions {
-                allWarningsAsErrors = true
-            }
-        }
+    compilerOptions {
+        languageVersion = KOTLIN_2_1
+        apiVersion = KOTLIN_2_1
+        allWarningsAsErrors = true
+        explicitApi = Strict
+        freeCompilerArgs.addAll(
+            "-Xexpect-actual-classes",
+            "-opt-in=kotlin.contracts.ExperimentalContracts",
+        )
+        progressiveMode = true
     }
 
-    android()
+    jvmToolchain(javaVersion)
+
+    androidTarget()
 
     listOf(
         iosX64(),
@@ -40,22 +54,12 @@ kotlin {
     }
 
     sourceSets {
-        all {
-            languageSettings.apply {
-                languageVersion = "1.8"
-                apiVersion = "1.8"
-                optIn("kotlin.contracts.ExperimentalContracts")
-                optIn("kotlin.time.ExperimentalTime")
-                progressiveMode = true
-            }
-        }
-
         val commonMain by getting
 
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${findProperty("kotlinx.coroutines.version")}")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${catalogVersion("kotlinx-coroutines")}")
             }
         }
 
@@ -63,8 +67,8 @@ kotlin {
 
         val androidUnitTest by getting {
             dependencies {
-                implementation("androidx.test:runner:${findProperty("androidxTestVersion")}")
-                implementation("org.robolectric:robolectric:${findProperty("robolectricVersion")}")
+                implementation("androidx.test:runner:${catalogVersion("androidx")}")
+                implementation("org.robolectric:robolectric:${catalogVersion("robolectric")}")
             }
         }
 
@@ -87,12 +91,12 @@ android {
         sourceCompatibility(JavaVersion.VERSION_1_8)
         targetCompatibility(JavaVersion.VERSION_1_8)
     }
-    
-    compileSdk = (findProperty("android.compileSdk") as String).toInt()
+
+    compileSdk = (catalogVersion("android-compile-sdk")).toInt()
 
     defaultConfig {
-        minSdk = (findProperty("android.minSdk") as String).toInt()
-        targetSdk = (findProperty("android.targetSdk") as String).toInt()
+        minSdk = (catalogVersion("android-min-sdk")).toInt()
+        targetSdk = (catalogVersion("android-target-sdk")).toInt()
     }
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 
