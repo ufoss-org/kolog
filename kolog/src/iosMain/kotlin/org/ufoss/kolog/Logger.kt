@@ -7,7 +7,7 @@ package org.ufoss.kolog
 import platform.Foundation.NSLog
 
 /**
- * Kotlin idiomatic logger for Android based on Logcat
+ * Kotlin idiomatic logger for IOS based on NSLog
  */
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
 public actual value class Logger @PublishedApi internal constructor(
