@@ -1,5 +1,5 @@
 ## Release
-* Go to github actions : https://github.com/ufoss-org/kolog/actions
+* Go to GitHub actions : https://github.com/ufoss-org/kolog/actions
 * Execute 'Publish on demand' (no need for build, because it builds before publishing, so it would fail before doing
 anything important)
 * When finished, go to staging repos : https://s01.oss.sonatype.org/#stagingRepositories (ufoss account)
@@ -27,5 +27,5 @@ Follow [this](https://github.com/actions/setup-java/tree/v1.4.3#publishing-using
 ## Deprecated local release
 * verify the current version you want to release in gradle.properties
 * verify you are using SSH with GIT
-* use openJDK 11 as project JDK
+* use Temurin 17 as project JDK
 * do **publish** task
