@@ -8,6 +8,9 @@ anything important)
   * refresh again after several seconds, repo has gone -> it's released on maven central
 * do **release** task locally (for minor release, press Enter for suggested versions : release version = current, new version = current + 1)
 
+## Publishing
+Generate a User Token in https://s01.oss.sonatype.org (ufoss account)
+
 ## Signing
 Inspired by [this](https://stackoverflow.com/a/66457517)
 Followed [this link for CI deploy](https://docs.gradle.org/current/userguide/signing_plugin.html#sec:in-memory-keys)
@@ -27,5 +30,5 @@ Follow [this](https://github.com/actions/setup-java/tree/v1.4.3#publishing-using
 ## Deprecated local release
 * verify the current version you want to release in gradle.properties
 * verify you are using SSH with GIT
-* use Temurin 17 as project JDK
+* use Temurin 11 as project JDK, but Temurin 17 for Gradle
 * do **publish** task
