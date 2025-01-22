@@ -10,6 +10,7 @@ import kotlin.jvm.optionals.getOrNull
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("org.jetbrains.dokka")
     `maven-publish`
 }
 

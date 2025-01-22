@@ -5,6 +5,8 @@ java = "11"
 # plugins
 # https://github.com/JetBrains/kotlin/releases
 kotlin = "2.1.0"
+# https://github.com/Kotlin/dokka/releases
+dokka = "2.0.0"
 # https://github.com/researchgate/gradle-release/releases
 release = "3.1.0"
 # https://developer.android.com/reference/tools/gradle-api
@@ -32,6 +34,7 @@ kotlinx-coroutines = "1.10.1"
 [libraries]
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 android-gradle-plugin = { group = "com.android.library", name = "com.android.library.gradle.plugin", version.ref = "android" }
+dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }

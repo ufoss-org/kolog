@@ -7,6 +7,7 @@ import kotlin.jvm.optionals.getOrNull
 
 plugins {
     kotlin("multiplatform")
+    id("org.jetbrains.dokka-javadoc")
     `maven-publish`
 }
 
@@ -57,6 +58,17 @@ kotlin {
                 exceptionFormat = TestExceptionFormat.FULL
                 showStandardStreams = true
             }
+        }
+
+        // Generate javadoc jar for Java and Kotlin code in jvm artefacts.
+        val dokkaJavadocJar by tasks.registering(Jar::class) {
+            description = "A Javadoc JAR containing Dokka Javadoc for Java and Kotlin"
+            from(tasks.dokkaGeneratePublicationJavadoc.flatMap { it.outputDirectory })
+            archiveClassifier.set("javadoc")
+        }
+
+        mavenPublication {
+            artifact(dokkaJavadocJar)
         }
     }
 
