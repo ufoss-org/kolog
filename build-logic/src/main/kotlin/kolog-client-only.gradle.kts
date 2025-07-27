@@ -1,7 +1,6 @@
 import org.gradle.api.GradleException
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.kotlin.dsl.assign
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Strict
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_1
@@ -47,11 +46,25 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
+        macosArm64(),
+        macosX64()
     ).forEach {
         it.binaries.framework {
             baseName = "kolog"
         }
+    }
+
+    listOf(
+        linuxArm64(),
+        linuxX64()
+    ).forEach {
+        it.binaries.sharedLib {
+            baseName = "kolog"
+        }
+//        it.compilations["main"].cinterops {
+//            create("posix")
+//        }
     }
 
     sourceSets {
@@ -73,14 +86,29 @@ kotlin {
             }
         }
 
+        val macosArm64Main by getting
+        val macosX64Main by getting
+        val appleMain by creating {
+            dependsOn(commonMain)
+            macosArm64Main.dependsOn(this)
+            macosX64Main.dependsOn(this)
+        }
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
-            dependsOn(commonMain)
+            dependsOn(appleMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+        }
+
+        val linuxArm64Main by getting
+        val linuxX64Main by getting
+        val linuxMain by creating {
+            dependsOn(commonMain)
+            linuxArm64Main.dependsOn(this)
+            linuxX64Main.dependsOn(this)
         }
     }
 }
@@ -115,7 +143,6 @@ afterEvaluate {
         publications {
             create<MavenPublication>("allVariants") {
                 artifactId = project.name + "-android"
-                
                 from(components["default"])
             }
         }
