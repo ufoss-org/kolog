@@ -11,7 +11,7 @@ import platform.posix.LOG_WARNING
 import platform.posix.syslog
 
 /**
- * Kotlin idiomatic logger for IOS based on NSLog
+ * Kotlin idiomatic logger for Linux code based on syslog
  */
 @Suppress("NON_PUBLIC_PRIMARY_CONSTRUCTOR_OF_INLINE_CLASS")
 public actual value class Logger @PublishedApi internal constructor(
