@@ -1,11 +1,6 @@
-import org.gradle.api.GradleException
-import org.gradle.api.artifacts.VersionCatalog
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Strict
-import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_1
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2
 import kotlin.jvm.optionals.getOrNull
 
 plugins {
@@ -24,8 +19,8 @@ val javaVersion = catalogVersion("java").toInt()
 
 kotlin {
     compilerOptions {
-        languageVersion = KOTLIN_2_1
-        apiVersion = KOTLIN_2_1
+        languageVersion = KOTLIN_2_2
+        apiVersion = KOTLIN_2_2
         allWarningsAsErrors = true
         explicitApi = Strict
         freeCompilerArgs.addAll(
@@ -68,14 +63,11 @@ kotlin {
         it.binaries.sharedLib {
             baseName = "kolog"
         }
-//        it.compilations["main"].cinterops {
-//            create("posix")
-//        }
     }
 
-    sourceSets {
-        val commonMain by getting
+    applyDefaultHierarchyTemplate()
 
+    sourceSets {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
@@ -83,12 +75,10 @@ kotlin {
             }
         }
 
-        val jvmMain by getting
-        
         val jvmTest by getting {
             dependencies {
                 // import BOM
-                implementation(platform("org.junit:junit-bom:${catalogVersion("junit")}"))
+                implementation(project.dependencies.platform("org.junit:junit-bom:${catalogVersion("junit")}"))
 
                 implementation("org.junit.jupiter:junit-jupiter-api")
 
@@ -98,8 +88,6 @@ kotlin {
             }
         }
 
-        val androidMain by getting
-
         val androidUnitTest by getting {
             dependencies {
                 implementation("androidx.test:runner:${catalogVersion("androidx")}")
@@ -107,30 +95,20 @@ kotlin {
             }
         }
 
-        val macosArm64Main by getting
-        val macosX64Main by getting
-        val appleMain by creating {
-            dependsOn(commonMain)
-            macosArm64Main.dependsOn(this)
-            macosX64Main.dependsOn(this)
+        val apple by creating {
+            dependsOn(commonMain.get())
         }
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(appleMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-        }
+        iosArm64Main.get().dependsOn(apple)
+        iosX64Main.get().dependsOn(apple)
+        iosSimulatorArm64Main.get().dependsOn(apple)
+        macosArm64Main.get().dependsOn(apple)
+        macosX64Main.get().dependsOn(apple)
 
-        val linuxArm64Main by getting
-        val linuxX64Main by getting
-        val linuxMain by creating {
-            dependsOn(commonMain)
-            linuxArm64Main.dependsOn(this)
-            linuxX64Main.dependsOn(this)
+        val linux by creating {
+            dependsOn(commonMain.get())
         }
+        linuxArm64Main.get().dependsOn(linux)
+        linuxX64Main.get().dependsOn(linux)
     }
 }
 
@@ -141,7 +119,7 @@ android {
         sourceCompatibility(JavaVersion.VERSION_11)
         targetCompatibility(JavaVersion.VERSION_11)
     }
-    
+
     compileSdk = (catalogVersion("android-compile-sdk")).toInt()
 
     defaultConfig {

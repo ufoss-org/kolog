@@ -34,9 +34,6 @@ kotlin {
     jvmToolchain(javaVersion)
 
     jvm {
-        // For JPMS module-info.java
-        withJava()
-
         val compileKotlinJvm: KotlinCompile by tasks
         val compileJava: JavaCompile by tasks
         // replace '-' with '.' to match JPMS jigsaw module name
@@ -87,7 +84,7 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 // import BOM
-                implementation(platform("org.junit:junit-bom:${catalogVersion("junit")}"))
+                implementation(project.dependencies.platform("org.junit:junit-bom:${catalogVersion("junit")}"))
 
                 implementation("org.junit.jupiter:junit-jupiter-api")
 

@@ -1,6 +1,6 @@
 [![License: Unlicense](https://img.shields.io/github/license/ufoss-org/kolog?style=flat-square)](http://unlicense.org/)
 [![Version](https://img.shields.io/maven-central/v/org.ufoss.kolog/kolog?logo=apache-maven&color=&style=flat-square)](https://search.maven.org/artifact/org.ufoss.kolog/kolog)
-[![Kotlin](https://img.shields.io/badge/kotlin-2.1.0-blue.svg?logo=kotlin&style=flat-square)](http://kotlinlang.org)
+[![Kotlin](https://img.shields.io/badge/kotlin-2.2.0-blue.svg?logo=kotlin&style=flat-square)](http://kotlinlang.org)
 
 # kolog
 

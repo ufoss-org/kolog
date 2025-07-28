@@ -25,14 +25,14 @@ jobs:
         with:
           path: |
               ~/.konan/dependencies
-              ~/.konan/kotlin-native-prebuilt-macos-2.1.0
-          key: ${{ runner.os }}-konan-2.1.0
-          restore-keys: ${{ runner.os }}-konan-2.1.0
-      - name: Build Mobile only
+              ~/.konan/kotlin-native-prebuilt-macos-2.2.0
+          key: ${{ runner.os }}-konan-2.2.0
+          restore-keys: ${{ runner.os }}-konan-2.2.0
+      - name: Build with all platforms
         run: ./gradlew -Dorg.gradle.daemon=false clean build -Djpms=false --build-cache
       - name: Build JPMS (Jigsaw JVM only)
         run: ./gradlew -Dorg.gradle.daemon=false build -Djpms=true --build-cache
-      - name: Publish Mobile only to Maven Central
+      - name: Publish all to Maven Central
         run: gradle publish -Djpms=false
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
