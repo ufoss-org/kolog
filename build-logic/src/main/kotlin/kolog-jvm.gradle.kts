@@ -34,6 +34,8 @@ kotlin {
     jvmToolchain(javaVersion)
 
     jvm {
+        withJava()
+
         val compileKotlinJvm: KotlinCompile by tasks
         val compileJava: JavaCompile by tasks
         // replace '-' with '.' to match JPMS jigsaw module name

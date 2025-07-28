@@ -1,4 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode.Strict
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2
 import kotlin.jvm.optionals.getOrNull
@@ -32,16 +31,6 @@ kotlin {
 
     jvmToolchain(javaVersion)
 
-    jvm {
-        testRuns["test"].executionTask.configure {
-            useJUnitPlatform()
-            testLogging {
-                events = setOf(TestLogEvent.PASSED, TestLogEvent.FAILED, TestLogEvent.SKIPPED)
-                showStandardStreams = true
-            }
-        }
-    }
-
     androidTarget()
 
     listOf(
@@ -65,26 +54,13 @@ kotlin {
         }
     }
 
-    applyDefaultHierarchyTemplate()
-
     sourceSets {
+        val commonMain by getting
+
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${catalogVersion("kotlinx-coroutines")}")
-            }
-        }
-
-        val jvmTest by getting {
-            dependencies {
-                // import BOM
-                implementation(project.dependencies.platform("org.junit:junit-bom:${catalogVersion("junit")}"))
-
-                implementation("org.junit.jupiter:junit-jupiter-api")
-
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine")
-                runtimeOnly("org.slf4j:slf4j-jdk-platform-logging:${catalogVersion("slf4j")}")
-                runtimeOnly("ch.qos.logback:logback-classic:${catalogVersion("logback")}")
             }
         }
 
@@ -95,20 +71,26 @@ kotlin {
             }
         }
 
-        val apple by creating {
-            dependsOn(commonMain.get())
+        val appleMain by creating {
+            dependsOn(commonMain)
         }
-        iosArm64Main.get().dependsOn(apple)
-        iosX64Main.get().dependsOn(apple)
-        iosSimulatorArm64Main.get().dependsOn(apple)
-        macosArm64Main.get().dependsOn(apple)
-        macosX64Main.get().dependsOn(apple)
+        iosArm64Main.get().dependsOn(appleMain)
+        iosX64Main.get().dependsOn(appleMain)
+        iosSimulatorArm64Main.get().dependsOn(appleMain)
+        macosArm64Main.get().dependsOn(appleMain)
+        macosX64Main.get().dependsOn(appleMain)
 
-        val linux by creating {
-            dependsOn(commonMain.get())
+        val linuxMain by creating {
+            dependsOn(commonMain)
         }
-        linuxArm64Main.get().dependsOn(linux)
-        linuxX64Main.get().dependsOn(linux)
+        linuxArm64Main.get().dependsOn(linuxMain)
+        linuxX64Main.get().dependsOn(linuxMain)
+
+        val linuxTest by creating {
+            dependsOn(commonTest)
+        }
+        linuxArm64Test.get().dependsOn(linuxTest)
+        linuxX64Test.get().dependsOn(linuxTest)
     }
 }
 

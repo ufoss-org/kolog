@@ -12,13 +12,11 @@ println("Using Java compiler version: ${JavaVersion.current()}")
 println("isJpms = $isJpms")
 
 plugins {
-    id("kolog-jpms-no-native") apply false
-    id("kolog-dev") apply false
+    id("kolog-jvm") apply false
+    id("kolog-no-jvm") apply false
 }
 
 when (isJpms) {
-    true -> apply(plugin = "kolog-jpms-no-native")
-    else -> apply(plugin = "kolog-dev")
+    true -> apply(plugin = "kolog-jvm")
+    else -> apply(plugin = "kolog-no-jvm")
 }
-// uncomment for editing module-info.java
-//apply(plugin = "kolog-jpms-no-native")
