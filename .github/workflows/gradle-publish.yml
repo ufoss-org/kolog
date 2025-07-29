@@ -44,3 +44,8 @@ jobs:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSWORD }}
           ORG_GRADLE_PROJECT_ossrhHeader: ${{ secrets.OSSR_HEADER }}
+      - name: Transfer from OSSRH Staging API to Central Publisher Portal.
+        uses: JamesIves/fetch-api-data-action@v2
+        with:
+          endpoint: https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/org.ufoss
+          configuration: '{ "method": "POST", "headers": {"Authorization": "Bearer ${{ secrets.OSSR_HEADER }}"} }'

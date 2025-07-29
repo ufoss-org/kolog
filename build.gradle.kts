@@ -40,9 +40,9 @@ subprojects {
                     name = "Authorization"
                     value = ossrhHeader
                 }
-//                authentication {
-//                    create<HttpHeaderAuthentication>("header")
-//                }
+                authentication {
+                    create<HttpHeaderAuthentication>("header")
+                }
             }
         }
 
