@@ -37,12 +37,10 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSWORD }}
-          ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.OSSR_USERNAME }}
-          ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.OSSR_PASSWORD }}
+          ORG_GRADLE_PROJECT_ossrhHeader: ${{ secrets.OSSR_HEADER }}
       - name: Publish JVM only to Maven Central
         run: gradle publish -Djpms=true
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSWORD }}
-          ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.OSSR_USERNAME }}
-          ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.OSSR_PASSWORD }}
+          ORG_GRADLE_PROJECT_ossrhHeader: ${{ secrets.OSSR_HEADER }}
