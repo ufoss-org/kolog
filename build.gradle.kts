@@ -1,7 +1,12 @@
-val ossrhHeader = if (project.hasProperty("ossrhHeader")) {
-    project.property("ossrhHeader") as String?
+val ossrhUsername = if (project.hasProperty("ossrhUsername")) {
+    project.property("ossrhUsername") as String?
 } else {
-    System.getenv("OSSRH_HEADER")
+    System.getenv("OSSRH_USERNAME")
+}
+val ossrhPassword = if (project.hasProperty("ossrhPassword")) {
+    project.property("ossrhPassword") as String?
+} else {
+    System.getenv("OSSRH_PASSWORD")
 }
 
 val signingKey = if (project.hasProperty("signingKey")) {
@@ -36,12 +41,9 @@ subprojects {
                 name = "ossrh-staging-api"
                 setUrl("https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/")
 
-                credentials(HttpHeaderCredentials::class) {
-                    name = "Authorization"
-                    value = ossrhHeader
-                }
-                authentication {
-                    create<HttpHeaderAuthentication>("header")
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
                 }
             }
         }
