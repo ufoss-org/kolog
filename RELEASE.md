@@ -1,15 +1,22 @@
 ## Release
-* Go to GitHub actions : https://github.com/ufoss-org/kolog/actions
+* Go to GitHub actions: https://github.com/ufoss-org/kolog/actions
 * Execute 'Publish on demand' (no need for build, because it builds before publishing, so it would fail before doing
 anything important)
-* When finished, go to staging repos : https://s01.oss.sonatype.org/#stagingRepositories (ufoss account)
-  * do **close** , refresh
-  * then **release**
-  * refresh again after several seconds, repo has gone -> it's released on maven central
-* do **release** task locally (for minor release, press Enter for suggested versions : release version = current, new version = current + 1)
+* When finished, go to the publishing page https://central.sonatype.com/publishing (ufoss account)
+  * For each deployment, click on **Publish**
+  * Refresh again after several minutes, deployment status must be "PUBLISHED"
+* do **release** task (for minor release, press Enter for suggested versions: release version = current,
+new version = current + 1)
 
 ## Publishing
-Generate a User Token in https://s01.oss.sonatype.org (ufoss account)
+Follow https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/#2-make-separate-requests
+
+curl --request GET --header "Authorization: Bearer *replaceMe*" https://ossrh-staging-api.central.sonatype.com/manual/search/repositories?ip=any&profile_id=org.ufoss
+Then call this for each repository ID
+curl --request POST --header "Authorization: Bearer *replaceMe*" https://ossrh-staging-api.central.sonatype.com/manual/upload/repository/*repoId*
+
+Before all:
+Generate a User Token in https://central.sonatype.org/publish/generate-portal-token/ (ufoss account)
 
 ## Signing
 Inspired by [this](https://stackoverflow.com/a/66457517)
