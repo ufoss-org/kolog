@@ -48,4 +48,4 @@ jobs:
         uses: JamesIves/fetch-api-data-action@v2
         with:
           endpoint: https://ossrh-staging-api.central.sonatype.com/manual/upload/defaultRepository/org.ufoss
-          configuration: '{ "method": "POST", "headers": {"Authorization": "Bearer ${{ secrets.OSSR_HEADER }}"} }'
+          configuration: '{ "method": "POST", "headers": {"Authorization": "${{ secrets.OSSR_HEADER }}"} }'
