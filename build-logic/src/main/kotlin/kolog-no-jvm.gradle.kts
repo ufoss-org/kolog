@@ -112,8 +112,20 @@ android {
 
     publishing {
         multipleVariants {
+            // Publishes all build variants with "default" component, see afterEvaluate publishing below
             allVariants()
             withSourcesJar()
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("allVariants") {
+                artifactId = project.name + "-android"
+                from(components["default"])
+            }
         }
     }
 }
