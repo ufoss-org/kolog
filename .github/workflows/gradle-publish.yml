@@ -28,18 +28,18 @@ jobs:
               ~/.konan/kotlin-native-prebuilt-macos-2.2.0
           key: ${{ runner.os }}-konan-2.2.0
           restore-keys: ${{ runner.os }}-konan-2.2.0
-      - name: Build with all platforms
+      - name: Build all platforms but JVM
         run: ./gradlew -Dorg.gradle.daemon=false clean build -Djpms=false --build-cache
-      - name: Build JPMS (Jigsaw JVM only)
+      - name: Build JVM only
         run: ./gradlew -Dorg.gradle.daemon=false build -Djpms=true --build-cache
-      - name: Publish all to Maven Central
+      - name: Publish all platforms but JVM to Maven Central
         run: gradle publish -Djpms=false
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.GPG_PASSWORD }}
           ORG_GRADLE_PROJECT_ossrhUsername: ${{ secrets.OSSR_USERNAME }}
           ORG_GRADLE_PROJECT_ossrhPassword: ${{ secrets.OSSR_PASSWORD }}
-      - name: Publish JPMS (Jigsaw JVM only) to Maven Central
+      - name: Publish JVM only to Maven Central
         run: gradle publish -Djpms=true
         env:
           ORG_GRADLE_PROJECT_signingKey: ${{ secrets.GPG_PRIVATE_KEY }}

@@ -28,7 +28,7 @@ jobs:
               ~/.konan/kotlin-native-prebuilt-macos-2.2.0
           key: ${{ runner.os }}-konan-2.2.0
           restore-keys: ${{ runner.os }}-konan-2.2.0
-      - name: Build with all platforms
+      - name: Build all platforms but JVM
         run: ./gradlew -Dorg.gradle.daemon=false clean build -Djpms=false --build-cache
-      - name: Build JPMS (Jigsaw JVM only)
+      - name: Build JVM only
         run: ./gradlew -Dorg.gradle.daemon=false clean build -Djpms=true --build-cache
