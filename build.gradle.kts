@@ -1,3 +1,5 @@
+import org.gradle.tooling.GradleConnector
+
 val ossrhUsername = if (project.hasProperty("ossrhUsername")) {
     project.property("ossrhUsername") as String?
 } else {
@@ -86,17 +88,33 @@ subprojects {
     }
 }
 
-// Workaround for project with modules https://github.com/researchgate/gradle-release/issues/144
-tasks.register("releaseBuild") {
-    dependsOn(subprojects.map { it.tasks.findByName("build") }.toTypedArray())
+// workaround : https://github.com/researchgate/gradle-release/issues/304#issuecomment-1083692649
+configure(listOf(tasks.release, tasks.runBuildTasks)) {
+    configure {
+        actions.clear()
+        doLast {
+            GradleConnector
+                .newConnector()
+                .forProjectDirectory(layout.projectDirectory.asFile)
+                .connect()
+                .use { projectConnection ->
+                    val buildLauncher = projectConnection
+                        .newBuild()
+                        .forTasks(*tasks.toTypedArray())
+                        .setStandardInput(System.`in`)
+                        .setStandardOutput(System.out)
+                        .setStandardError(System.err)
+                    gradle.startParameter.excludedTaskNames.forEach {
+                        buildLauncher.addArguments("-x", it)
+                    }
+                    buildLauncher.run()
+                }
+        }
+    }
 }
 
-release {
-    buildTasks.set(listOf("releaseBuild"))
-}
-
-// when version changes :
-// -> execute ./gradlew wrapper, then delete .gradle directory, then execute ./gradlew wrapper again
+// when the Gradle version changes:
+// -> execute ./gradlew wrapper, then remove .gradle directory, then execute ./gradlew wrapper again
 tasks.wrapper {
     gradleVersion = "8.14.3"
     distributionType = Wrapper.DistributionType.ALL
